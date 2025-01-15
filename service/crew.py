@@ -3,10 +3,10 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool, FileReadTool, PDFSearchTool
 from dotenv import load_dotenv
 import os
-from PyPDF2 import PdfReader
+#from PyPDF2 import PdfReader
 import json
 import re
-
+from llama_functions import LlamaParse
 
 load_dotenv()
 
@@ -18,12 +18,19 @@ def convert_pdf_to_json(file):
 
   llm = LLM(model="gpt-4o-mini", temperature=0.5,
             api_key=API_KEY)
+  
+  texto = llm_parse(file)
 
-  reader = PdfReader(file)
+  print(texto)
+
+  """reader = PdfReader(file)
   texto = ""
 
   for page in reader.pages:
-      texto += page.extract_text()
+      texto += page.extract_text()"""
+
+
+
 
   json_example = """
   {
