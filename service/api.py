@@ -15,8 +15,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def home():
     return jsonify({"message": "Bem-vindo à API Flask!"})
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
+@app.route('/upload/<candidate_id>', methods=['POST'])
+def upload_file(candidate_id):
     # Verifica se a requisição contém um arquivo
     if 'file' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
@@ -47,7 +47,7 @@ def upload_file():
             # Cria o currículo
             print("criando curriculo")
             try:
-                new_cv = create_new_resume(response, candidate_id="1736209489739x319429545895133200")
+                new_cv = create_new_resume(response, candidate_id)
             except Exception as e:
                 print(f"Erro ao criar currículo: {e}")
 

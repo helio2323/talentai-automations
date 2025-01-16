@@ -1,0 +1,90 @@
+{
+    "curriculos": {
+        "curriculos": [
+            {
+                "about": {
+                    "contact": {
+                        "address": [
+                            {
+                                "city": "Cidade Brasileira",
+                                "country": "",
+                                "state": "",
+                                "street": "Rua Alegre, 123",
+                                "zip_code": ""
+                            }
+                        ],
+                        "email": "ola@grandesite.com.br",
+                        "phone": "(12) 3456-7890",
+                        "website": "www.grandesite.com.br"
+                    },
+                    "name": "JULIANA SILVA",
+                    "position": "Estagiária de Marketing",
+                    "professional_objective": "Estagiária de Marketing entusiasmado e criativo, buscando uma oportunidade para aplicar conhecimentos acadêmicos em marketing, aprender com profissionais experientes e contribuir para o sucesso de projetos de marketing inovadores."
+                },
+                "additional_courses": [
+                    {
+                        "course": "Workshop de Design Gráfico e Criação de Conteúdo",
+                        "end_date": "2022-01-01",
+                        "institution": "Universidade Borcelle",
+                        "notes": "",
+                        "start_date": "2021-01-01",
+                        "years": "2021 - 2022"
+                    }
+                ],
+                "education": [
+                    {
+                        "city": "",
+                        "current": "no",
+                        "degree": "Bacharelado",
+                        "description": "",
+                        "diploma": "Bacharelado em Marketing",
+                        "end_date": "2022-01-01",
+                        "institution": "Universidade Borcelle",
+                        "start_date": "2018-01-01",
+                        "years": "2018 - 2022"
+                    },
+                    {
+                        "city": "",
+                        "current": "no",
+                        "degree": "Técnico",
+                        "description": "",
+                        "diploma": "Ensino Médio",
+                        "end_date": "2018-01-01",
+                        "institution": "Colégio Albuquerque e Cia.",
+                        "start_date": "2016-01-01",
+                        "years": "2016 - 2018"
+                    }
+                ],
+                "experience": [],
+                "languages": [
+                    {
+                        "language": "Português",
+                        "proficiency": "Nativo"
+                    },
+                    {
+                        "language": "Inglês",
+                        "proficiency": "Avançado"
+                    },
+                    {
+                        "language": "Espanhol",
+                        "proficiency": "Básico"
+                    }
+                ],
+                "skills": [
+                    "Marketing",
+                    "Análise de dados",
+                    "Marketing digital",
+                    "Criação de conteúdo",
+                    "Design Gráfico",
+                    "Redes Sociais",
+                    "Software de design",
+                    "Software de fotografia",
+                    "Software de textos",
+                    "Software de vídeos",
+                    "Software de diagramação",
+                    "Software de planilha"
+                ]
+            }
+        ]
+    }
+}

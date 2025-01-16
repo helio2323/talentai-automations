@@ -6,7 +6,7 @@ import os
 #from PyPDF2 import PdfReader
 import json
 import re
-from llama_functions import LlamaParse
+from llama_functions import llm_parse
 
 load_dotenv()
 
