@@ -4,6 +4,11 @@ from crewai_tools import SerperDevTool, FileReadTool, PDFSearchTool
 from dotenv import load_dotenv
 from langchain_ollama import ChatOllama
 import os
+import contextlib
+import warnings
+from urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+import requests
 
 load_dotenv()
 
@@ -32,6 +37,14 @@ groq = LLM(
     api_key=GROQ_API_KEY,
     temperature=0.5
 )
+
+def create_session():
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
 
 selected_llm = gpt
 
@@ -100,6 +113,11 @@ crew = Crew(
     verbose=True
 )
 
-crew_output = crew.kickoff()
-
-print(crew_output.raw)
+try:
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", ResourceWarning)
+        with contextlib.closing(crew):
+            crew_output = crew.kickoff()
+    print(crew_output.raw)
+except Exception as e:
+    print(f"Erro durante a execução: {e}")
