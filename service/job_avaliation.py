@@ -46,7 +46,7 @@ def create_session():
     session.mount('https://', adapter)
     return session
 
-selected_llm = gpt
+selected_llm = gpt.with_session(create_session())
 
 json_schema = """
 {
@@ -113,11 +113,9 @@ crew = Crew(
     verbose=True
 )
 
-try:
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", ResourceWarning)
-        with contextlib.closing(crew):
-            crew_output = crew.kickoff()
-    print(crew_output.raw)
-except Exception as e:
-    print(f"Erro durante a execução: {e}")
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", ResourceWarning)
+    with contextlib.closing(crew):
+        crew_output = crew.kickoff()
+
+print(crew_output.raw)
