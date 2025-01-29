@@ -1,0 +1,69 @@
+Sobre a vaga
+About the company
+
+
+
+First Line Software partners with the world's leading companies and organizations in industries such as healthcare, data development, warehouse automation, retail digitalization, mobile app development, e-commerce, and artificial intelligence (AI). AI is at the heart of our innovation, transforming industries and pushing the boundaries of what's possible. Our projects are as diverse as our people, and our people are as talented as they are. We prefer to work in a transparent and supportive team that shares our knowledge and successes. Let's see what we can create together!
+
+
+
+The project and your role:
+
+
+
+We are looking for an experienced Sr Full Stack (Front End) Developer to join our innovative team for one of our international projects in development and optimization of modern web applications with a strong focus on frontend technologies and seamless integration with HubSpot CMS, including serverless functions, HubL, and HubDb.
+
+
+
+Responsibilities:
+
+
+
+Develop and maintain modern web applications using Next.js, Vue.js, and Tailwind CSS.
+Build and optimize components and pages within HubSpot CMS, leveraging HubL, HubDb, and serverless functions for dynamic and personalized content.
+Collaborate with designers to ensure pixel-perfect, responsive, and accessible implementations.
+Integrate APIs and ensure seamless data flow between the frontend and backend services.
+Conduct code reviews and mentor junior developers to ensure high-quality code standards.
+Troubleshoot and resolve performance and scalability issues in the applications.
+
+
+Your skills:
+
+
+
+Minimum of 5+ years of experience as a full-stack developer with a strong frontend focus.
+Proven experience with Next.js, Vue.js, Tailwind CSS, and Tailwind UI.
+Extensive expertise with HubSpot CMS, including HubL, HubDb, and serverless function implementation.
+Strong understanding of responsive and accessible web design principles.
+Proficiency in integrating and working with APIs (REST/GraphQL).
+Strong problem-solving skills and the ability to work independently or collaboratively within Agile teams.
+Excellent communication skills to collaborate effectively with design, QA, and marketing teams
+
+
+Tech stack (must have):
+
+
+
+JavaScript, Next.js, Vue.js, Tailwind CSS, Tailwind UI
+HubSpot CMS, HubL (HubSpots templating language), HubDb, and serverless functions
+REST, GraphQL APIs
+
+
+Tech stack (nice to have):
+
+
+
+Knowledge of web analytics tools like Google Analytics or HubSpot tracking.
+Familiarity with SEO best practices.
+Experience with testing frameworks and setting up automation for QA.
+
+
+What we can offer:
+
+
+
+Our modern stack projects are the right mix of exciting and challenging;
+Gain access to our diverse range of training programs, courses, and certifications;
+Choose your work style - remote, on-site or hybrid in one of our stunning offices. We offer the freedom of flexible working hours;
+Enhance your language skills with our corporate English classes;
+Work from anywhere and explore the world with our Workation program.

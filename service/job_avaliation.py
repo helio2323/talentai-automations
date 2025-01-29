@@ -46,7 +46,7 @@ def create_session():
     session.mount('https://', adapter)
     return session
 
-selected_llm = gpt.with_session(create_session())
+selected_llm = gpt
 
 json_schema = """
 {
@@ -113,9 +113,6 @@ crew = Crew(
     verbose=True
 )
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", ResourceWarning)
-    with contextlib.closing(crew):
-        crew_output = crew.kickoff()
+crew_output = crew.kickoff()
 
 print(crew_output.raw)

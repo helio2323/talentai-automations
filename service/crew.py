@@ -31,74 +31,77 @@ def convert_pdf_to_json(file):
 
 
 
-
   json_example = """
-  {
-    "curriculos": [
-      {{
-        "about": {{
-          "name": "Nome do dono do currículo",
-          "position": "Profissão",
-          "contact": {{
-            "phone": "Telefone",
-            "email": "Email",
-            "website": "Website (caso tenha)",
-            "address": [{{
-              "street": "Logradouro",
-              "city": "Cidade",
-              "state": "Estado",
-              "country": "País",
-              "zip_code": "CEP"}}
-            ]
-          }},
-          "professional_objective": "Objetivo profissional (caso tenha)"
-        }},
-        "experience": [
-          {{
-            "certification_name": "Nome do cargo",
-            "years": "Data de início - Data de término",
-            "institution": "Nome da empresa",
-            "description": "Descrição (caso tenha)",
-            "actual_position": "yes",
-            "start_date": "2023-01-01",
-            "end_date": "2023-06-30",
-          }}
-        ],
-        "education": [
-          {{
-            "diploma": "Nome do curso",
-            "years": "Data de início - Data de término",
-            "institution": "Nome da instituição",
-            "description": "Descrição (caso tenha)",
-            "current": "yes",
-            "start_date": "2023-01-01",
-            "end_date": "2023-06-30",
-            "city": "Guarulhos",
-            "degree" : "Bacharelado or Tecnico"
-          }}
-        ],
-        "skills": ["Habilidade 1", "Habilidade 2", "Habilidade 3"], 
-        "languages": [],
-        "additional_courses": [
-                        {
-                      "course": "Python",
-                      "institution": "OneBitCode",
-                      "notes": "",
-                      "years": "2023",
-                      "start_date": "2023-01-01",
-                      "end_date": "2023-06-30"
-                  },
-                  {
-                      "course": "VueJs",
-                      "institution": "OneBitCode",
-                      "notes": "",
-                      "years": "2023",
-                      "start_date": "2023-01-01",
-                      "end_date": "2023-06-30"
-                  },]
-      }}
-    ]
-  }"""
+    {
+        "curriculos": [
+            {
+                "about": {
+                    "name": "Nome do dono do currículo",
+                    "position": "Profissão",
+                    "contact": {
+                        "phone": "Telefone",
+                        "email": "Email",
+                        "website": "Website (caso tenha)",
+                        "address": [
+                            {
+                                "street": "Logradouro",
+                                "city": "Cidade",
+                                "state": "Estado",
+                                "country": "País",
+                                "zip_code": "CEP"
+                            }
+                        ]
+                    },
+                    "professional_objective": "Objetivo profissional (caso tenha)"
+                },
+                "experience": [
+                    {
+                        "titulo": "Nome do cargo",
+                        "years": "Data de início - Data de término",
+                        "institution": "Nome da empresa",
+                        "description": "Descrição (caso tenha)",
+                        "actual_position": "yes",
+                        "start_date": "2023-01-01",
+                        "end_date": "2023-06-30"
+                    }
+                ],
+                "education": [
+                    {
+                        "diploma": "Nome do curso",
+                        "years": "Data de início - Data de término",
+                        "institution": "Nome da instituição",
+                        "description": "Descrição (caso tenha)",
+                        "current": "yes",
+                        "start_date": "2023-01-01",
+                        "end_date": "2023-06-30",
+                        "city": "Guarulhos",
+                        "degree": "Bacharelado or Tecnico"
+                    }
+                ],
+                "skills": ["Habilidade 1", "Habilidade 2", "Habilidade 3"], 
+                "languages": [],
+                "additional_courses": [
+                    {
+                        "course": "Python",
+                        "institution": "OneBitCode",
+                        "notes": "",
+                        "years": "2023",
+                        "start_date": "2023-01-01",
+                        "end_date": "2023-06-30"
+                    },
+                    {
+                        "course": "VueJs",
+                        "institution": "OneBitCode",
+                        "notes": "",
+                        "years": "2023",
+                        "start_date": "2023-01-01",
+                        "end_date": "2023-06-30"
+                    }
+                ]
+            }
+        ]
+    }
+    """
 
   """Criar os agentes que vao carregar o curriculo e passar os dados para o formato JSON"""
 
@@ -154,6 +157,8 @@ def convert_pdf_to_json(file):
       verbose=True
   )
 
+
+
   crew = Crew(
       name="Curriculo",
       description="Curriculo de uma pessoa",
@@ -161,8 +166,8 @@ def convert_pdf_to_json(file):
       llm=llm,
       verbose=True,
       agents=[Leitor],
-      expected_output="JSON"
-  )
+      expected_output="JSON",
+)
 
   crew_output =crew.kickoff()
 

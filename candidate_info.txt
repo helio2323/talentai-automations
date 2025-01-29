@@ -1,0 +1,172 @@
+{
+    "curriculos": {
+        "curriculos": [
+            {
+                "about": {
+                    "contact": {
+                        "address": [
+                            {
+                                "city": "Rio de Janeiro",
+                                "country": "",
+                                "state": "",
+                                "street": "",
+                                "zip_code": ""
+                            }
+                        ],
+                        "email": "rhuambello@gmail.com",
+                        "phone": "(21) 96889-2704",
+                        "website": ""
+                    },
+                    "name": "Rhuan Bello",
+                    "position": "Desenvolvedor Front-End",
+                    "professional_objective": "Em busca de atuar como desenvolvedor front-end."
+                },
+                "additional_courses": [
+                    {
+                        "course": "Michigan English Test",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "CEFR Level: C1",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "Fundamentos do Design UX/UI",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "HTML Web Developer",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "Web Design Completo",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "CSS Avançado",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "Cybersecurity Essentials",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "Gestão de Projetos e Aplicativo",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "Operador de Suporte Técnico em TI",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "(800h)",
+                        "start_date": "",
+                        "years": ""
+                    },
+                    {
+                        "course": "Fisk English Course",
+                        "end_date": "",
+                        "institution": "",
+                        "notes": "(768h)",
+                        "start_date": "",
+                        "years": ""
+                    }
+                ],
+                "education": [
+                    {
+                        "city": "",
+                        "current": "yes",
+                        "degree": "",
+                        "description": "",
+                        "diploma": "Certified Tech Developer",
+                        "end_date": "2024-04-01",
+                        "institution": "Digital House Brasil",
+                        "start_date": "2021-08-01",
+                        "years": "Ago/2021 - Abr/2024"
+                    },
+                    {
+                        "city": "",
+                        "current": "no",
+                        "degree": "Bacharelado",
+                        "description": "Desenvolvimento de Sistemas Web, Implementação de Banco de Dados, Arquitetura de Sistemas, Estrutura de Dados, Modelagem de Dados e Gestão de Projetos.",
+                        "diploma": "Bacharelando em Sistemas de Informação",
+                        "end_date": "2021-12-01",
+                        "institution": "Universidade Estácio de Sá",
+                        "start_date": "2018-02-01",
+                        "years": "Fev/2018 - Dez/2021"
+                    },
+                    {
+                        "city": "",
+                        "current": "no",
+                        "degree": "Técnico",
+                        "description": "HTML 5 e CSS3, JavaScript, PHP com Banco de Dados, MySQL, Teste de Software com Selenium, Gerenciamento Ágil de Projeto, Lean Startup e Software Livre.",
+                        "diploma": "Técnico em Informática - Software",
+                        "end_date": "2020-02-01",
+                        "institution": "Senat - Serviço Nacional de Aprendizagem Comercial",
+                        "start_date": "2018-08-01",
+                        "years": "Ago/2018 - Fev/2020"
+                    }
+                ],
+                "experience": [
+                    {
+                        "actual_position": "yes",
+                        "certification_name": "Jovem Aprendiz em Tecnologia - Infraestrutura",
+                        "description": "Responsável pela manutenção corretiva e preventiva da infraestrutura de TI da empresa no contrato do Aeroporto Santos Dumont. Adquirido soft-skills como: resolução de problemas, senso crítico, comunicação, organização, aprender a aprender, trabalho em equipe e empatia.",
+                        "end_date": "2023-10-01",
+                        "institution": "IC Supply Engenharia LTDA",
+                        "start_date": "2020-03-01",
+                        "years": "Mar/2020 - Atual"
+                    }
+                ],
+                "languages": [
+                    {
+                        "language": "Inglês",
+                        "proficiency": "C1"
+                    }
+                ],
+                "skills": [
+                    "HTML 5",
+                    "CSS3",
+                    "JavaScript",
+                    "Bootstrap 4",
+                    "Wordpress",
+                    "Sass",
+                    "Programação Imperativa com JavaScript",
+                    "Design Thinking",
+                    "UI/UX",
+                    "Learning Agility",
+                    "Front-End I, II e III",
+                    "Figma",
+                    "Git",
+                    "Node.js",
+                    "Metodologias Ágeis",
+                    "Teamwork & Collaboration",
+                    "Comunicação Efetiva"
+                ]
+            }
+        ]
+    }
+}
