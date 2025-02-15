@@ -1,106 +1,83 @@
-import logging
 import sqlite3
-import traceback
-import datetime
-from colorama import Fore, Style, init
 
-# Inicializa o colorama para compatibilidade no Windows
-init(autoreset=True)
 
-class SQLiteHandler(logging.Handler):
-    def __init__(self, db_path="logs.db"):
-        super().__init__()
-        self.db_path = db_path
-        self._initialize_db()
+# Obtém a conexão com o banco de dados
+def get_db_connection():
+    conn = sqlite3.connect("profiles.db")
+    conn.row_factory = sqlite3.Row  # Retorna os resultados como dicionários
+    return conn
 
-    def _initialize_db(self):
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT,
-                level TEXT,
-                message TEXT,
-                email TEXT,
-                file_name TEXT,
-                line_number INTEGER,
-                application_name TEXT
-            )
-        ''')
-        conn.commit()
-        conn.close()
+def create_table_queue():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS queue (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            job_id TEXT NOT NULL,
+            max_candidates INTEGER DEFAULT 10,
+            status INTEGER DEFAULT 0,  -- 0 = Pendente, 1 = Concluído
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            cargos TEXT,  -- Lista de cargos
+            habilidades TEXT,  -- Lista de habilidades
+            ferramentas TEXT,  -- Lista de ferramentas
+            localizacoes TEXT,  -- Lista de localizações
+            max_interactions INTEGER DEFAULT 5,
+            job_bubble_id TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
-    def emit(self, record):
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            log_time = datetime.datetime.fromtimestamp(record.created).strftime('%Y-%m-%d %H:%M:%S')
-            cursor.execute('''
-                INSERT INTO logs (
-                    timestamp, 
-                    level, 
-                    message, 
-                    email, 
-                    file_name, 
-                    line_number, 
-                    application_name
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                log_time,
-                record.levelname,
-                record.getMessage(),
-                getattr(record, 'email', None),
-                record.pathname,
-                record.lineno,
-                getattr(record, 'application_name', None)
-            ))
-            conn.commit()
-            conn.close()
-        except Exception:
-            print("Erro ao salvar log no banco de dados:", traceback.format_exc())
 
-# Classe para colorir logs no console
-class ColoredFormatter(logging.Formatter):
-    COLORS = {
-        "DEBUG": Fore.BLUE,
-        "INFO": Fore.GREEN,
-        "WARNING": Fore.YELLOW,
-        "ERROR": Fore.RED,
-        "CRITICAL": Fore.MAGENTA + Style.BRIGHT
-    }
+import json
 
-    def format(self, record):
-        log_color = self.COLORS.get(record.levelname, Fore.WHITE)
-        formatted_message = super().format(record)
-        return f"{log_color}{formatted_message}{Style.RESET_ALL}"
+def insert_job_queue(job_id, status=0, max_candidates=10, cargos=None, habilidades=None, ferramentas=None, localizacoes=None, max_interactions=5, job_bubble_id=None):
+    if cargos is None:
+        cargos = []
+    if habilidades is None:
+        habilidades = []
+    if ferramentas is None:
+        ferramentas = []
+    if localizacoes is None:
+        localizacoes = []
+    
+    # Converte listas para string JSON
+    cargos_json = json.dumps(cargos)
+    habilidades_json = json.dumps(habilidades)
+    ferramentas_json = json.dumps(ferramentas)
+    localizacoes_json = json.dumps(localizacoes)
 
-# Configuração do logger
-logger = logging.getLogger("my_app")
-logger.setLevel(logging.DEBUG)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO queue (job_id, status, max_candidates, cargos, habilidades, ferramentas, localizacoes, max_interactions, job_bubble_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (job_id, status, max_candidates, cargos_json, habilidades_json, ferramentas_json, localizacoes_json, max_interactions, job_bubble_id))
+    conn.commit()
+    job_inserted_id = cursor.lastrowid
+    conn.close()
+    return job_inserted_id
 
-# Remove handlers existentes (se houver)
-for handler in logger.handlers[:]:
-    logger.removeHandler(handler)
 
-# Configuração do formato do log
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+# Retorna o primeiro job pendente na fila
+def get_job_queue():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT * FROM queue WHERE status = 0 ORDER BY timestamp ASC LIMIT 1
+    ''')
+    job = cursor.fetchone()
+    conn.close()
+    return job
 
-# Adiciona o SQLiteHandler
-sqlite_handler = SQLiteHandler()
-sqlite_handler.setFormatter(formatter)
-logger.addHandler(sqlite_handler)
+# Atualiza o status de um job (0 = Pendente, 1 = Concluído)
+def update_job_status(job_id, status):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE queue SET status = ? WHERE job_id = ?
+    ''', (status, job_id))
+    conn.commit()
+    conn.close()
 
-# Adiciona um handler para exibir logs no console com cores
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
-console_formatter = ColoredFormatter('%(asctime)s - %(levelname)s - %(message)s')
-console_handler.setFormatter(console_formatter)
-logger.addHandler(console_handler)
-
-# Testando os logs coloridos
-logger.debug("Este é um log de debug")
-logger.info("Este é um log de informação")
-logger.warning("Este é um log de aviso")
-logger.error("Este é um log de erro")
-logger.critical("Este é um log crítico")
+create_table_queue()
