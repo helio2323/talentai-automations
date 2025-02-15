@@ -7,6 +7,7 @@ from crew import convert_pdf_to_json
 from bubble_cv import create_new_resume
 from utils.google import search_profiles
 from utils.aditionals_functions import create_table_queue, insert_job_queue, update_job_status, get_db_connection
+from job_avaliation import avaliation_candidate
 import json
 
 app = Flask(__name__)
@@ -19,6 +20,20 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/', methods=['GET'])
 def home():
     return jsonify({"message": "Bem-vindo à API Flask!"})
+
+@app.route("/avaliate_candidate", methods=['POST'])
+def avaliate_candidate():
+    try:
+        data = request.get_json()
+        candidate_cv_info = data.get("candidate_cv_info")
+        job_info = data.get("job_info")
+
+        result = avaliation_candidate(candidate_cv_info, job_info)
+        
+        # Retorna o dict convertido em JSON
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/upload/<candidate_id>', methods=['POST'])
 def upload_file(candidate_id):
