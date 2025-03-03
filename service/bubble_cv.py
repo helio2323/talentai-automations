@@ -2,12 +2,22 @@
 import json
 import requests
 
-url_resume = "https://consium.com.br/version-test/api/1.1/obj/talent-resumes/"
-url_candidate = "https://consium.com.br/version-test/api/1.1/obj/talent-candidate-info/"
-url_addrress = "https://consium.com.br/version-test/api/1.1/obj/talent-resume-address/"
-url_experience = "https://consium.com.br/version-test/api/1.1/obj/talent-resume-work-experience/"
-url_education = "https://consium.com.br/version-test/api/1.1/obj/talent-resume-education/"
-url_certification = "https://consium.com.br/version-test/api/1.1/obj/talent-resume-certifications/"
+url_resume = "https://talentai.com.br/version-test/api/1.1/obj/talent-resumes/"
+url_candidate = "https://talentai.com.br/version-test/api/1.1/obj/talent-candidate-info/"
+url_addrress = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-address/"
+url_experience = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-work-experience/"
+url_education = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-education/"
+url_certification = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-certifications/"
+
+def convert_to_date(date_str):
+    from datetime import datetime
+    if date_str:
+        return datetime.strptime(date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+    
+    return None
+
+    
+
 
 def create_data_bubble(json_data, url_bb, operation):
   import json
@@ -155,8 +165,8 @@ def extrair_experiencia_curriculo(data, resume_id):
             "company_name": instituicao,
             "position": titulo,
             "description": descricao,
-            "start_date": start_date,
-            "end_date": end_date,
+            "start_date": convert_to_date(start_date),
+            "end_date": convert_to_date(end_date),
             "actual_position": actual_position,
             "experience_order": i,
             "city": city,
@@ -219,12 +229,12 @@ def extrair_education(data, resume_id):
             "institution": instituicao,
             "Diploma": titulo,
             "description": descricao,
-            "start_date": start_date,
-            "end_date": end_date,
+            "start_date": convert_to_date(start_date),
+            "end_date": convert_to_date(end_date),
             "current": atual,
             "experience_order": i,
             "resume_id": resume_id,
-            "degree": education.get("degree", None)
+            "degree": education.get("degree", "N/A")
         }
 
         # Enviar dados para a API Bubble
