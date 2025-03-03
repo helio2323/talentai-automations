@@ -1,6 +1,33 @@
 
 import json
 import requests
+from log import SQLiteHandler, ColoredFormatter, logging
+
+
+# Configuração do logger
+logger = logging.getLogger("my_app")
+logger.setLevel(logging.DEBUG)
+
+# Remove handlers existentes (se houver)
+for handler in logger.handlers[:]:
+    logger.removeHandler(handler)
+
+# Configuração do formato do log
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+# Adiciona o SQLiteHandler
+sqlite_handler = SQLiteHandler()
+sqlite_handler.setFormatter(formatter)
+logger.addHandler(sqlite_handler)
+
+# Adiciona um handler para exibir logs no console com cores
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+console_formatter = ColoredFormatter('%(asctime)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(console_formatter)
+logger.addHandler(console_handler)
+
+
 
 url_resume = "https://talentai.com.br/version-test/api/1.1/obj/talent-resumes/"
 url_candidate = "https://talentai.com.br/version-test/api/1.1/obj/talent-candidate-info/"
@@ -10,6 +37,7 @@ url_education = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-
 url_certification = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-certifications/"
 
 def convert_to_date(date_str):
+    logger.debug(f"Convertendo a data: {date_str}")
     from datetime import datetime
     if date_str:
         return datetime.strptime(date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
@@ -20,6 +48,7 @@ def convert_to_date(date_str):
 
 
 def create_data_bubble(json_data, url_bb, operation):
+  logger.debug(f"Enviando dados para a URL: {url_bb}")
   import json
   url = url_bb
   headers = {
@@ -39,6 +68,7 @@ def create_data_bubble(json_data, url_bb, operation):
 import json
 
 def extrair_dados_curriculos(data, candidate_id):
+    logger.debug(f"Extraindo dados do currículo na posição [0]")
     """
     Extrai os dados do currículo na posição [0] e retorna um JSON com as informações completas.
 
@@ -79,6 +109,7 @@ def extrair_dados_curriculos(data, candidate_id):
 
 
 def extrair_endereco_curriculo(data):
+    logger.debug(f"Extraindo dados de endereço do currículo na posição [0]")
     """
     Extrai os dados de endereço do currículo na posição [0] e retorna um JSON com os dados do endereço.
 
@@ -127,6 +158,7 @@ def extrair_endereco_curriculo(data):
 import json
 
 def extrair_experiencia_curriculo(data, resume_id):
+    logger.debug(f"Extraindo dados de experiência profissional do currículo na posição [0]")
     """
     Extrai os dados de experiência profissional do currículo na posição [0] e retorna uma lista com os dados extraídos.
 
@@ -191,6 +223,7 @@ def extrair_experiencia_curriculo(data, resume_id):
 import json
 
 def extrair_education(data, resume_id):
+    logger.debug(f"Extraindo dados de educação do currículo na posição [0]")
     """
     Extrai os dados de educação do currículo e os envia para a API Bubble.
 
@@ -258,6 +291,7 @@ def extrair_education(data, resume_id):
 import json
 
 def extrair_certifications(data, resume_id):
+    logger.debug(f"Extraindo dados de certificações do currículo na posição [0]")
     """
     Extrai os dados de certificações do currículo e os envia para a API Bubble.
 
@@ -316,6 +350,7 @@ def extrair_certifications(data, resume_id):
 
 
 def create_new_resume(data, candidate_id):
+    logger.debug(f"Criando novo currículo para o candidato {candidate_id}")
 
     json_data = extrair_dados_curriculos(data, candidate_id)
 
