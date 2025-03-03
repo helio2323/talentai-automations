@@ -21,19 +21,20 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def home():
     return jsonify({"message": "Bem-vindo à API Flask!"})
 
+
 @app.route("/avaliate_candidate", methods=['POST'])
 def avaliate_candidate():
     try:
-        data = request.get_json()
-        candidate_cv_info = data.get("candidate_cv_info")
-        job_info = data.get("job_info")
+        # Pegando os dados do form-data
+        candidate_cv_info = request.form.get("candidate_cv_info")
+        job_info = request.form.get("job_info")
 
         result = avaliation_candidate(candidate_cv_info, job_info)
         
-        # Retorna o dict convertido em JSON
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route('/upload/<candidate_id>', methods=['POST'])
 def upload_file(candidate_id):

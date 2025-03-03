@@ -190,6 +190,7 @@ Instruções:
 - Se alguma informação não estiver disponível, mantenha a chave com valor "" ou uma lista vazia.
 - Não adicione informações não presentes no currículo.
 - Não repita chaves no JSON.
+- em degree utilize o valor "Bacharelado" ou "Técnico" nao utilize outro valor
 
 Exemplo de JSON esperado:
 {json_example}
