@@ -132,7 +132,13 @@ def add_job():
 
     return jsonify({"message": "Job adicionado", "job_id": job_id, "inserted_id": job_inserted_id}), 201
 
-
+@app.route("/get_job_queue", methods=["GET"])
+def get_job_queue():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    jobs = get_job_queue(cursor)
+    conn.close()
+    return jsonify(jobs), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=3002)
+    app.run(debug=True, host='0.0.0.0', port=3003)

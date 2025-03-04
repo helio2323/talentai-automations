@@ -59,16 +59,28 @@ def insert_job_queue(job_id, status=0, max_candidates=10, cargos=None, habilidad
     return job_inserted_id
 
 
-# Retorna o primeiro job pendente na fila
+import json
+
 def get_job_queue():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
         SELECT * FROM queue WHERE status = 0 ORDER BY timestamp ASC LIMIT 1
     ''')
+    
     job = cursor.fetchone()
+    colunas = [desc[0] for desc in cursor.description]
+
     conn.close()
-    return job
+
+    if job is None:
+        return {"message": "No pending jobs"}
+
+    job_dict = dict(zip(colunas, job))
+
+    return job_dict  # Retorna um dicionário, não uma string JSON
+
+
 
 # Atualiza o status de um job (0 = Pendente, 1 = Concluído)
 def update_job_status(job_id, status):
