@@ -22,6 +22,13 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import requests
 import os
+import time
+import logging
+import re
+import json
+import sys
+import traceback
+
 
 
 
@@ -210,6 +217,7 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 class SQLiteHandler(logging.Handler):
+    import traceback
     def __init__(self, db_path="logs.db"):
         super().__init__()
         self.db_path = db_path
@@ -849,7 +857,7 @@ def enter_in_profile(navegador, candidate_range):
         profile_result = navegador.driver.find_elements(By.XPATH, '//span[@jscontroller="msmzHf"]')
 
         link_elemento = profile_result[candidate_range].find_element(By.XPATH, './/a')
-        link_elemento.click()
+        profile_result.click()
 
         return navegador
     except:
@@ -1489,6 +1497,7 @@ def get_candidates_from_google_linkedin(navegador, job_id, max_candidates):
                     logger.error(f"Erro {traceback.format_exc()}")
                     candidate_range += 1
                     continue
+
 
             navegador.click("ID", "pnnext")      
 
