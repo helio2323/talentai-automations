@@ -51,6 +51,7 @@ def upload_file(candidate_id):
     if file:
         # Define o caminho do arquivo salvo
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        type_aplication = request.form.get("type_aplication", "version-test")
 
         # Salva o arquivo no servidor
         file.save(file_path)
@@ -68,7 +69,7 @@ def upload_file(candidate_id):
             # Cria o currículo
             print("criando curriculo")
             try:
-                new_cv = create_new_resume(response, candidate_id)
+                new_cv = create_new_resume(response, candidate_id, type_aplication)
             except Exception as e:
                 print(f"Erro ao criar currículo: {e}")
 
@@ -134,4 +135,4 @@ def add_job():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=3000)
+    app.run(debug=True, host='0.0.0.0', port=3002)

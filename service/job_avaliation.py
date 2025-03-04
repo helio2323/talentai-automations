@@ -76,6 +76,7 @@ def avaliation_candidate(candidate_cv_info, job_info):
     "missing_information": "Quaisquer informações ausentes em {candidate_cv_info} ou {job_info} que dificultaram a avaliação",
     "justification": "Resumo textual que explica o score atribuído com base nos requisitos da vaga e qualificações do candidato",
     "recommendation": "Recomendação final, categorizada como 'Altamente recomendável', 'Recomendável com reservas' ou 'Não recomendável'"
+    "perguntas_recomendadas": "Lista de perguntas recomendadas para a entrevista com o candidato"
     }
 
     """
