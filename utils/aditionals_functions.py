@@ -1,11 +1,16 @@
 import sqlite3
+import os
 
+# Caminho absoluto para evitar erros
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # Sobe um nível para a pasta raiz
+DB_PATH = os.path.join(BASE_DIR, 'utils', 'profiles.db')
 
-# Obtém a conexão com o banco de dados
 def get_db_connection():
-    conn = sqlite3.connect("profiles.db")
-    conn.row_factory = sqlite3.Row  # Retorna os resultados como dicionários
+    """Cria uma conexão com o banco de dados na pasta utils."""
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
     return conn
+
 
 def create_table_queue():
     conn = get_db_connection()
