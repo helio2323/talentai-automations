@@ -92,7 +92,7 @@ def update_job_status(job_id, status):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        UPDATE queue SET status = ? WHERE job_id = ?
+        UPDATE queue SET status = ? WHERE job_bubble_id = ?
     ''', (status, job_id))
     conn.commit()
     conn.close()

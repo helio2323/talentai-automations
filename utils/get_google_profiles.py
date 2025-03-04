@@ -27,6 +27,7 @@ while True:
         get_candidates_from_google_linkedin(navegador, jobs["job_bubble_id"], jobs["max_candidates"])
 
         #chamar rota para atualizar o status da fila
+        response = requests.post("https://api.talentai.com.br/update_job_status", json={"job_id": jobs["job_bubble_id"], "status": 1})
         
 
     except Exception as e:

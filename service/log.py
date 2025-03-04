@@ -5,9 +5,12 @@ import os
 import traceback
 from colorama import Fore, Style
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # Sobe um nível para a pasta raiz
+DB_PATH = os.path.join(BASE_DIR, 'utils', 'profiles.db')
+DBPATH_LOGS = os.path.join(BASE_DIR, 'utils', 'logs.db')
 
 class SQLiteHandler(logging.Handler):
-    def __init__(self, db_path="logs.db"):
+    def __init__(self, db_path=DBPATH_LOGS):
         super().__init__()
         self.db_path = db_path
         self._initialize_db()

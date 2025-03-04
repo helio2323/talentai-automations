@@ -138,5 +138,23 @@ def get_job():
     # Retorna o primeiro job pendente na fila
     return jsonify(jobs)
 
+@app.route("/update_job_status", methods=["POST"])
+def update_job():
+
+    data = request.get_json()
+
+    job_id = data.get("job_id")
+    status = data.get("status")
+
+    print(job_id, status)
+
+    if not job_id or not status:
+        return jsonify({"error": "job_id e status são obrigatórios"}), 400
+    
+    update_job_status(job_id, status)
+
+    return jsonify({"message": "Job atualizado"}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3003)
