@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from crew import convert_pdf_to_json
 from bubble_cv import create_new_resume
 from utils.google import search_profiles
-from utils.aditionals_functions import create_table_queue, insert_job_queue, update_job_status, get_db_connection
+from utils.aditionals_functions import create_table_queue, insert_job_queue, update_job_status, get_db_connection, get_job_queue
 from job_avaliation import avaliation_candidate
 import json
 
@@ -132,7 +132,12 @@ def add_job():
 
     return jsonify({"message": "Job adicionado", "job_id": job_id, "inserted_id": job_inserted_id}), 201
 
-
+@app.route("/get_job_queue", methods=["GET"])
+def get_job():
+    jobs = get_job_queue()
+    
+    # Retorna o primeiro job pendente na fila
+    return jsonify(jobs)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3002)
