@@ -5,7 +5,6 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from crew import convert_pdf_to_json
 from bubble_cv import create_new_resume
-from utils.google import search_profiles
 from utils.aditionals_functions import create_table_queue, insert_job_queue, update_job_status, get_db_connection, get_job_queue
 from job_avaliation import avaliation_candidate
 import json
@@ -140,4 +139,4 @@ def get_job():
     return jsonify(jobs)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=3002)
+    app.run(debug=True, host='0.0.0.0', port=3003)
