@@ -1,34 +1,34 @@
-import nbformat
-from nbconvert import PythonExporter
+import time
+import requests
+import sys
+sys.path.append('/home/helio/Documentos/talentai-automations')
+from utils.google import get_linkedin_profile, get_candidates_from_google_linkedin
 
-def load_ipynb_functions(notebook_path):
-    with open(notebook_path, "r", encoding="utf-8") as f:
-        notebook = nbformat.read(f, as_version=4)
+from aditionals_functions import get_job_queue
 
-    exporter = PythonExporter()
-    source_code, _ = exporter.from_notebook_node(notebook)
+while True:
 
-    exec(source_code, globals())  # Executa o código no escopo global
-
-# Exemplo: Carregar funções do notebook "google.ipynb"
-load_ipynb_functions("google.ipynb")
-
-
-def search_profiles(**kwargs):
-    # Agora você pode chamar funções definidas no notebook
-
-    if  kwargs.get("job_bubble_id") !=  "":
-
-        resultado = query, navegador = get_linkedin_profile(
-            cargos=kwargs.get("cargos", []),
-            habilidades=kwargs.get("habilidades", []),
-            ferramentas=kwargs.get("ferramentas", []),
-            localizacoes=kwargs.get("localizacoes", []),
-            max_interactions=kwargs.get("max_interactions", 10),
-            job_bubble_id=kwargs.get("job_bubble_id", 1)
+    time.sleep(5)
+    
+    try:
+    
+        response = requests.get("https://api.talentai.com.br/get_job_queue")
+        jobs = response.json()
+        
+        query, navegador = get_linkedin_profile(
+            cargos=[jobs["cargos"]],
+            habilidades=[jobs["habilidades"]],
+            ferramentas=[jobs["ferramentas"]],
+            localizacoes=[jobs["localizacoes"]],
+            max_interactions=[jobs["max_interactions"]],
+            job_bubble_id=[jobs["job_bubble_id"]]
         )
 
-        get_candidates_from_google_linkedin(navegador, kwargs.get("job_bubble_id"), kwargs.get("max_interactions", 10))
-        return {"status": "Busca realizada com sucesso"}
-    else:
-        return {"status": "Nao foi possivel buscar perfis"}
+        get_candidates_from_google_linkedin(navegador, jobs["job_bubble_id"], jobs["max_candidates"])
+
+        #chamar rota para atualizar o status da fila
+        
+
+    except Exception as e:
+        print(f"Erro ao obter jobs da fila: {e}")
+        continue

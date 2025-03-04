@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[357]:
 
 
 from selenium import webdriver
@@ -22,13 +22,10 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import requests
 import os
-import time
-import logging
-import re
-import json
-import sys
-import traceback
 
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # Sobe um nível para a pasta raiz
+DB_PATH = os.path.join(BASE_DIR, 'utils', 'profiles.db')
+DBPATH_LOGS = os.path.join(BASE_DIR, 'utils', 'logs.db')
 
 
 
@@ -43,7 +40,8 @@ class Navegador:
         options.add_argument("--disable-popup-blocking")
         options.add_argument("--kiosk-printing")
         
-
+        proxy = "181.215.253.112:5001"
+        #options.add_argument(f"--proxy-server={proxy}")
         #add plugin
         options.add_extension('./solver.crx')
         
@@ -95,10 +93,10 @@ class Navegador:
         self.driver.get(url)
     def close(self):
     #  await asyncio.sleep(0)
-        self.driver.close()
+        self.driver.quit()   
 
     def close_session(self, session_id):
-        grid_url = "https://grid.consium.com.br/wd/hub"
+        grid_url = "https://grid.talentai.com.br/wd/hub"
         session_url = f"{grid_url}/session/{session_id}"
         response = requests.delete(session_url)
         if response.status_code == 200:
@@ -183,7 +181,7 @@ class Navegador:
                    
 
 
-# In[3]:
+# In[358]:
 
 
 def create_data_bubble(json_data, url_bb, operation):
@@ -204,7 +202,7 @@ def create_data_bubble(json_data, url_bb, operation):
   return response
 
 
-# In[4]:
+# In[359]:
 
 
 import logging
@@ -217,8 +215,7 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 class SQLiteHandler(logging.Handler):
-    import traceback
-    def __init__(self, db_path="logs.db"):
+    def __init__(self, db_path=DBPATH_LOGS):
         super().__init__()
         self.db_path = db_path
         self._initialize_db()
@@ -310,13 +307,13 @@ logger.addHandler(console_handler)
 
 
 
-# In[5]:
+# In[360]:
 
 
 import sqlite3
 import json
 
-def salvar_ou_atualizar_perfil_em_banco(perfil, nome_arquivo_db="profiles.db"):
+def salvar_ou_atualizar_perfil_em_banco(perfil, nome_arquivo_db=DB_PATH):
     """
     Salva ou atualiza um único perfil no banco de dados SQLite.
 
@@ -408,7 +405,7 @@ def salvar_ou_atualizar_perfil_em_banco(perfil, nome_arquivo_db="profiles.db"):
     print(f"Processamento concluído. Banco de dados atualizado: {nome_arquivo_db}!")
 
 
-# In[6]:
+# In[361]:
 
 
 def wait_close_popup(navegador):
@@ -417,7 +414,7 @@ def wait_close_popup(navegador):
 
 
 
-# In[7]:
+# In[362]:
 
 
 def is_page_exists(navegador):
@@ -439,7 +436,7 @@ def is_page_exists(navegador):
 
 
 
-# In[8]:
+# In[363]:
 
 
 def is_page_is_not_found(navegador):
@@ -452,7 +449,7 @@ def is_page_is_not_found(navegador):
     return True  # Se encontrar o texto, retorna True
 
 
-# In[9]:
+# In[364]:
 
 
 def gerar_query(cargos = [], habilidades = [], bancos_dados = [], ferramentas = [], localizacoes = [], empresa=None):
@@ -489,25 +486,25 @@ def gerar_query(cargos = [], habilidades = [], bancos_dados = [], ferramentas = 
     return query
 
 
-# In[10]:
+# In[365]:
 
 
 def wait_for_captcha(navegador):
 
     try:
         # Aguarda até o elemento estar presente
-        WebDriverWait(navegador.driver, 240).until(EC.presence_of_element_located((By.CLASS_NAME, "HZVG1b.Tg7LZd")))
+        WebDriverWait(navegador.driver, 120).until(EC.presence_of_element_located((By.CLASS_NAME, "HZVG1b.Tg7LZd")))
 
         print("Elemento encontrado!")
     except TimeoutException:
         print("Elemento não encontrado dentro do tempo especificado.")
         # Fecha o navegador em caso de erro
-        navegador.driver.close()
+        navegador.quit()
         # Interrompe a execução do código
         raise SystemExit("Execução encerrada devido a erro.")
 
 
-# In[11]:
+# In[366]:
 
 
 def get_google_results(navegador, max_candidates):
@@ -570,8 +567,6 @@ def get_google_results(navegador, max_candidates):
     return perfis
 
 
-# In[12]:
-
 
 def get_linkedin_profile(**kwargs):
 
@@ -605,23 +600,22 @@ def get_linkedin_profile(**kwargs):
         logger.info("Waiting for captcha")
         wait_for_captcha(navegador)
     except Exception as e:
-        result = False
         logger.error(e)
         raise e
-        return query, navegador, result
-    result = True
-    return query, navegador, result
+
+    return query, navegador
 
     
 
-# In[ ]:
+
+# In[368]:
 
 
-"""import sqlite3
+import sqlite3
 import json
 
 # Conexão com o banco de dados (ou criação do arquivo se não existir)
-conn = sqlite3.connect("profiles.db")
+conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
 # Criação da tabela
@@ -690,16 +684,15 @@ INSERT INTO profile (
 conn.commit()
 print("Dados inseridos com sucesso!")
 conn.close()
-"""
 
 
-# In[14]:
+# In[369]:
 
 
 import sqlite3
 import json
 
-def salvar_ou_atualizar_perfis_em_banco(dados, nome_arquivo_db="profiles.db"):
+def salvar_ou_atualizar_perfis_em_banco(dados, nome_arquivo_db=DB_PATH):
     """
     Salva ou atualiza uma lista de perfis no banco de dados SQLite.
 
@@ -793,7 +786,7 @@ def salvar_ou_atualizar_perfis_em_banco(dados, nome_arquivo_db="profiles.db"):
 # - Avaliar como esse dado vai entrar no BUBBLE se vai utilizar o BD existente ou criar uma nova estrutura de tabelas para receber os dados
 # 
 
-# In[15]:
+# In[370]:
 
 
 def get_initial_infos_from_profile(navegador):
@@ -848,16 +841,14 @@ def get_initial_infos_from_profile(navegador):
     return name, headline, about, photo_url, link_profile, location
 
 
-# In[16]:
+# In[371]:
 
 
 def enter_in_profile(navegador, candidate_range):
     try:
         
         profile_result = navegador.driver.find_elements(By.XPATH, '//span[@jscontroller="msmzHf"]')
-
-        link_elemento = profile_result[candidate_range].find_element(By.XPATH, './/a')
-        profile_result.click()
+        profile_result[candidate_range].click()
 
         return navegador
     except:
@@ -865,7 +856,7 @@ def enter_in_profile(navegador, candidate_range):
         return navegador
 
 
-# In[17]:
+# In[372]:
 
 
 def get_experiences(navegador):
@@ -960,7 +951,7 @@ def get_experiences(navegador):
         }]
 
 
-# In[18]:
+# In[373]:
 
 
 def get_education(navegador):
@@ -1045,7 +1036,7 @@ def get_education(navegador):
         }]
 
 
-# In[19]:
+# In[374]:
 
 
 def get_certifications(navegador):
@@ -1114,7 +1105,7 @@ def get_certifications(navegador):
         return []
 
 
-# In[20]:
+# In[375]:
 
 
 def extructure_json(initial_infos_candidate, experiences, education, certifications, id_external_candidate):
@@ -1145,7 +1136,7 @@ def extructure_json(initial_infos_candidate, experiences, education, certificati
     return json_formated
 
 
-# In[21]:
+# In[376]:
 
 
 def create_address_bubble(initial_infos_candidate):
@@ -1173,7 +1164,7 @@ def create_address_bubble(initial_infos_candidate):
     return id_address
 
 
-# In[ ]:
+# In[377]:
 
 
 def create_experience_data_bubble(experiences):
@@ -1206,7 +1197,7 @@ def create_experience_data_bubble(experiences):
     return experiences_list
 
 
-# In[23]:
+# In[378]:
 
 
 def create_education_data_bubble(education):
@@ -1239,7 +1230,7 @@ def create_education_data_bubble(education):
     return education_list
 
 
-# In[24]:
+# In[379]:
 
 
 def create_certification_data_bubble(certifications):
@@ -1271,7 +1262,7 @@ def create_certification_data_bubble(certifications):
     return experience_list
 
 
-# In[25]:
+# In[380]:
 
 
 def create_resume_data_bubble(certification_id, education_id, experience_id, address_id):
@@ -1302,7 +1293,7 @@ def create_resume_data_bubble(certification_id, education_id, experience_id, add
 
 
 
-# In[26]:
+# In[381]:
 
 
 def create_external_candidate(initial_infos_candidate, id_resume):
@@ -1339,13 +1330,13 @@ def create_external_candidate(initial_infos_candidate, id_resume):
 
 
 
-# In[27]:
+# In[382]:
 
 
 def verifica_candidato(navegador, candidate_range):
     logger.info("Verificando se o candidato ja esta cadastrado")
 
-    nome_arquivo_db = 'profiles.db'
+    nome_arquivo_db = DB_PATH
 
     conn = sqlite3.connect(nome_arquivo_db)
     cursor = conn.cursor()
@@ -1376,13 +1367,13 @@ def verifica_candidato(navegador, candidate_range):
         return True, candidate  # Retorna True e os dados do candidato encontrado
 
 
-# In[28]:
+# In[383]:
 
 
 #CONSIDERAR ESSA COMO A FUNCAO QUE ATRELA OS CANDIDATOS AO JOB
 def vincula_candidato_job(job_id, id_external_candidate):
 
-    url = "https://consium.com.br/version-test/api/1.1/wf/add_external_candidate"
+    url = "https://talentai.com.br/version-test/api/1.1/wf/add_external_candidate"
 
     parameters = {
         "external_id": [id_external_candidate],
@@ -1401,15 +1392,13 @@ def vincula_candidato_job(job_id, id_external_candidate):
         print(f"Erro {resp.status_code}: {resp.text}")
 
 
-# In[ ]:
-
 
 def get_candidates_from_google_linkedin(navegador, job_id, max_candidates):
 
 
     import os
     import math
-
+    import time
     try:
 
         total_candidates = max_candidates + 5
@@ -1440,9 +1429,31 @@ def get_candidates_from_google_linkedin(navegador, job_id, max_candidates):
                         vincula_candidato_job(job_id, candidate_infos[13])
                         candidate_range += 1
                         continue
+                    
 
                     logger.info(f'Iniciando a busca do candidato {candidate_range}') #  --- Log
                     enter_in_profile(navegador=navegador, candidate_range=candidate_range)
+
+                    time.sleep(2)
+
+                    try:
+                        xpath = "/html/body/div/main/div/form/h1"
+                        element = navegador.driver.find_element(By.XPATH, xpath)
+                        print("Elemento encontrado na tela!")
+                        navegador.driver.back()
+                        continue
+                    except NoSuchElementException:
+                        print("Elemento NÃO encontrado na tela!")
+
+                    try:
+                        xpath = "/html/body/main/section[1]/div/h1"
+                        element = navegador.driver.find_element(By.XPATH, xpath)
+                        print("Elemento encontrado na tela!")
+                        navegador.driver.back()
+                        continue
+                    except NoSuchElementException:
+                        print("Elemento NÃO encontrado na tela!")
+
 
                     logger.info('Fechando a popup') # --- Log
                     wait_close_popup(navegador=navegador)
@@ -1498,7 +1509,6 @@ def get_candidates_from_google_linkedin(navegador, job_id, max_candidates):
                     candidate_range += 1
                     continue
 
-
             navegador.click("ID", "pnnext")      
 
         navegador.driver.quit()
@@ -1508,87 +1518,9 @@ def get_candidates_from_google_linkedin(navegador, job_id, max_candidates):
         }
     except Exception as e:
         logger.error(f"Erro {traceback.format_exc()}")
-        navegador.driver.close()
+        navegador.driver.quit()
         return {
             "status": "error",
             "message": str(e)
         }
 
-
-# In[30]:
-
-
-"""query, navegador = get_linkedin_profile(
-    cargos=["Full Stack Developer"],
-    habilidades=["Natural Language Processing", "NLP", "Python", "Machine Learning", "AI", "TensorFlow", "PyTorch", "Deep Learning", "Data Analysis"],
-    ferramentas=["Git", "Docker", "AWS", "Google Cloud"],
-    localizacoes=["Brasil"],
-    max_interactions=100,
-    job_bubble_id=1
-)"""
-
-
-# In[31]:
-
-
-#get_candidates_from_google_linkedin(navegador, "1738117388263x970142495908560900", 100)
-
-
-# #Criar End Point API
-# #Criar uma funcao principal que criar os dados no bubble e caso consiga retorna true e ai pode seguir com o cadastro no SQLITE
-
-# In[ ]:
-
-
-import sqlite3
-
-def limpar_banco_de_dados(nome_arquivo_db="logs.db"):
-    """
-    Remove todos os registros de todas as tabelas no banco de dados SQLite.
-
-    :param nome_arquivo_db: Nome do arquivo do banco de dados SQLite.
-    """
-    # Conexão com o banco de dados
-    conn = sqlite3.connect(nome_arquivo_db)
-    cursor = conn.cursor()
-
-    # Obter todas as tabelas do banco de dados
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tabelas = cursor.fetchall()
-
-    if not tabelas:
-        print("Nenhuma tabela encontrada no banco de dados.")
-    else:
-        for tabela in tabelas:
-            nome_tabela = tabela[0]
-            # Limpar a tabela
-            cursor.execute(f"DELETE FROM {nome_tabela};")
-            print(f"Tabela '{nome_tabela}' limpa com sucesso.")
-
-        # Confirmar alterações
-        conn.commit()
-
-    # Fechar a conexão
-    conn.close()
-    print(f"Banco de dados '{nome_arquivo_db}' foi completamente limpo.")
-
-#limpar_banco_de_dados()
-
-def search_profiles(**kwargs):
-    # Agora você pode chamar funções definidas no notebook
-
-    if  kwargs.get("job_bubble_id") !=  "":
-
-        query, navegador, result = get_linkedin_profile(
-            cargos=kwargs.get("cargos", []),
-            habilidades=kwargs.get("habilidades", []),
-            ferramentas=kwargs.get("ferramentas", []),
-            localizacoes=kwargs.get("localizacoes", []),
-            max_interactions=kwargs.get("max_interactions", 10),
-            job_bubble_id=kwargs.get("job_bubble_id", 1)
-        )
-
-        get_candidates_from_google_linkedin(navegador, kwargs.get("job_bubble_id"), kwargs.get("max_interactions", 10))
-        return {"status": "Busca realizada com sucesso"}
-    else:
-        return {"status": "Nao foi possivel buscar perfis"}
