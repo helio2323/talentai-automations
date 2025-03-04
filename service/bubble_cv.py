@@ -28,14 +28,6 @@ console_handler.setFormatter(console_formatter)
 logger.addHandler(console_handler)
 
 
-
-url_resume = "https://talentai.com.br/version-test/api/1.1/obj/talent-resumes/"
-url_candidate = "https://talentai.com.br/version-test/api/1.1/obj/talent-candidate-info/"
-url_addrress = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-address/"
-url_experience = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-work-experience/"
-url_education = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-education/"
-url_certification = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-certifications/"
-
 def convert_to_date(date_str):
     logger.debug(f"Convertendo a data: {date_str}")
     from datetime import datetime
@@ -157,7 +149,7 @@ def extrair_endereco_curriculo(data):
 
 import json
 
-def extrair_experiencia_curriculo(data, resume_id):
+def extrair_experiencia_curriculo(data, resume_id, url_resume, url_experience):
     logger.debug(f"Extraindo dados de experiência profissional do currículo na posição [0]")
     """
     Extrai os dados de experiência profissional do currículo na posição [0] e retorna uma lista com os dados extraídos.
@@ -222,7 +214,7 @@ def extrair_experiencia_curriculo(data, resume_id):
 
 import json
 
-def extrair_education(data, resume_id):
+def extrair_education(data, resume_id, url_resume, url_education):
     logger.debug(f"Extraindo dados de educação do currículo na posição [0]")
     """
     Extrai os dados de educação do currículo e os envia para a API Bubble.
@@ -290,7 +282,7 @@ def extrair_education(data, resume_id):
 
 import json
 
-def extrair_certifications(data, resume_id):
+def extrair_certifications(data, resume_id, url_resume, url_certification):
     logger.debug(f"Extraindo dados de certificações do currículo na posição [0]")
     """
     Extrai os dados de certificações do currículo e os envia para a API Bubble.
@@ -349,7 +341,26 @@ def extrair_certifications(data, resume_id):
 
 
 
-def create_new_resume(data, candidate_id):
+def create_new_resume(data, candidate_id, application):
+
+    if application != "version-test":
+
+        url_resume = "https://talentai.com.br/api/1.1/obj/talent-resumes/"
+        url_candidate = "https://talentai.com.br/api/1.1/obj/talent-candidate-info/"
+        url_addrress = "https://talentai.com.br/api/1.1/obj/talent-resume-address/"
+        url_experience = "https://talentai.com.br/api/1.1/obj/talent-resume-work-experience/"
+        url_education = "https://talentai.com.br/api/1.1/obj/talent-resume-education/"
+        url_certification = "https://talentai.com.br/api/1.1/obj/talent-resume-certifications/"
+
+    else:
+
+        url_resume = "https://talentai.com.br/version-test/api/1.1/obj/talent-resumes/"
+        url_candidate = "https://talentai.com.br/version-test/api/1.1/obj/talent-candidate-info/"
+        url_addrress = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-address/"
+        url_experience = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-work-experience/"
+        url_education = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-education/"
+        url_certification = "https://talentai.com.br/version-test/api/1.1/obj/talent-resume-certifications/"
+
     logger.debug(f"Criando novo currículo para o candidato {candidate_id}")
 
     json_data = extrair_dados_curriculos(data, candidate_id)
@@ -387,13 +398,13 @@ def create_new_resume(data, candidate_id):
     create_data_bubble(data_endereco, url_endereco_update, "update")
 
     """ Cria dado no banco experiencias"""
-    extrair_experiencia_curriculo(data, resume_id)
+    extrair_experiencia_curriculo(data, resume_id, url_resume, url_experience)
 
     """ Cria dado no banco educacao"""
-    extrair_education(data, resume_id)
+    extrair_education(data, resume_id, url_resume, url_education)
     
     """ Cria dado no banco certificacoes"""
-    extrair_certifications(data, resume_id)
+    extrair_certifications(data, resume_id, url_resume, url_certification)
 
     return resume_id
 
