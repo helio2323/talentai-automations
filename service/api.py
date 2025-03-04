@@ -112,6 +112,8 @@ def add_job():
     localizacoes = data.get("localizacoes", [])
     max_interactions = data.get("max_interactions", 5)
     job_bubble_id = data.get("job_bubble_id")
+    application = data.get("application", "version-test")
+    print(application)
     
     if not job_id:
         return jsonify({"error": "job_id é obrigatório"}), 400
@@ -126,7 +128,8 @@ def add_job():
                                        ferramentas=ferramentas, 
                                        localizacoes=localizacoes, 
                                        max_interactions=max_interactions, 
-                                       job_bubble_id=job_bubble_id)
+                                       job_bubble_id=job_bubble_id,
+                                       application=application)
     conn.close()
 
     return jsonify({"message": "Job adicionado", "job_id": job_id, "inserted_id": job_inserted_id}), 201

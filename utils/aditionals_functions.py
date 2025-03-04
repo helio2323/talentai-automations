@@ -36,7 +36,7 @@ def create_table_queue():
 
 import json
 
-def insert_job_queue(job_id, status=0, max_candidates=10, cargos=None, habilidades=None, ferramentas=None, localizacoes=None, max_interactions=5, job_bubble_id=None):
+def insert_job_queue(job_id, status=0, max_candidates=10, cargos=None, habilidades=None, ferramentas=None, localizacoes=None, max_interactions=5, job_bubble_id=None, application=None):
     if cargos is None:
         cargos = []
     if habilidades is None:
@@ -55,9 +55,9 @@ def insert_job_queue(job_id, status=0, max_candidates=10, cargos=None, habilidad
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO queue (job_id, status, max_candidates, cargos, habilidades, ferramentas, localizacoes, max_interactions, job_bubble_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (job_id, status, max_candidates, cargos_json, habilidades_json, ferramentas_json, localizacoes_json, max_interactions, job_bubble_id))
+        INSERT INTO queue (job_id, status, max_candidates, cargos, habilidades, ferramentas, localizacoes, max_interactions, job_bubble_id, application)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (job_id, status, max_candidates, cargos_json, habilidades_json, ferramentas_json, localizacoes_json, max_interactions, job_bubble_id, application))
     conn.commit()
     job_inserted_id = cursor.lastrowid
     conn.close()
@@ -70,20 +70,23 @@ def get_job_queue():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT * FROM queue WHERE status = 0 ORDER BY timestamp ASC LIMIT 1
+        SELECT * FROM queue WHERE status = 0 ORDER BY timestamp ASC
     ''')
     
-    job = cursor.fetchone()
+    jobs = cursor.fetchall()  # Obtém todos os registros
+
     colunas = [desc[0] for desc in cursor.description]
 
     conn.close()
 
-    if job is None:
+    if not jobs:  # Verifica se não há jobs pendentes
         return {"message": "No pending jobs"}
 
-    job_dict = dict(zip(colunas, job))
+    # Cria uma lista de dicionários para todos os jobs
+    jobs_list = [dict(zip(colunas, job)) for job in jobs]
 
-    return job_dict  # Retorna um dicionário, não uma string JSON
+    return jobs_list  # Retorna a lista de dicionários
+
 
 
 
